@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Treehouse.FitnessFrog.Data;
 using Treehouse.FitnessFrog.Models;
@@ -50,8 +49,6 @@ namespace Treehouse.FitnessFrog.Controllers
             return View(entry);
         }
 
-        
-
         [HttpPost]
         public ActionResult Add(Entry entry)
         {
@@ -67,8 +64,6 @@ namespace Treehouse.FitnessFrog.Controllers
             SetupActivitiesSelectListItems();
             return View(entry);
         }
-
-        
 
         public ActionResult Edit(int? id)
         {
@@ -122,7 +117,27 @@ namespace Treehouse.FitnessFrog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            return View();
+            // TODO Retrieve entry for the provided id parameter value
+            Entry entry = _entriesRepository.GetEntry((int)id);
+
+            // TODO Return not found of an entry wasn't found
+            if (entry == null)
+            {
+                return HttpNotFound();
+            }
+            
+            // TODO Pass the entry to the view
+            return View(entry);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            // TODO Delete the entry
+            _entriesRepository.DeleteEntry(id);
+
+            // TODO Redirect user to entries list page
+            return RedirectToAction("Index");
         }
 
         private void ValidateEntry(Entry entry)
